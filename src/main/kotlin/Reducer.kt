@@ -1,27 +1,30 @@
-import actions.AddTodo
-import actions.StatusFilterChanged
-import actions.ToggleTodo
 import entities.Todo
 import entities.VisibilityFilter
-import enums.Color
-import enums.CompletedStatus
-import redux.RAction
+import features.filters.filtersReducer
+import features.todos.todosReducer
+import redux.Reducer
+import redux.combineReducers
+import kotlin.reflect.KProperty1
 
-val initialState = State(
-    mutableListOf(
-        Todo(0, "Learn React", true, null),
-        Todo(1, "Learn Redux", false, Color.PURPLE),
-        Todo(2, "Build something fun!", false, Color.BLUE)
-    ),
-    VisibilityFilter(CompletedStatus.ALL, mutableListOf())
+// Stateとして管理するオブジェクトをDataクラスで保持する
+data class State(
+    val todos: List<Todo>,
+    val visibilityFilter: VisibilityFilter
 )
 
-fun appReducer(state: State = initialState, action: RAction): State =
-    when (action) {
-        is AddTodo -> state.apply { todos.add(Todo(action.id(todos), action.text, false, null)) }
-        is ToggleTodo -> state.apply {
-            todos.map { if (it.id == action.id) it.copy(completed = !it.completed) else it }
-        }
-        is StatusFilterChanged -> state.copy(visibilityFilter = state.visibilityFilter.copy(status = action.completedStatus()))
-        else -> state
-    }
+// 分割しているReducerをマッピングする
+fun combinedReducers() = combineReducers(
+    mapOf(
+        State::todos to ::todosReducer,
+        State::visibilityFilter to ::filtersReducer
+    )
+)
+
+/*
+* ReducerのマッピングKeyを型で定義する
+* 本来のcombineReducersのマッピングでは Keyは文字列("todos","visibilityFilter"など)で定義する。
+* また、Dataクラスのプロパティを変えたら、Keyも変える必要がある。
+* よってプロパティにKey名を追従させて変更時にコンパイルエラーが起こるように、Dataクラスのプロパティ名をKeyから参照するようにする
+* */
+fun <S, A, R> combineReducers(reducers: Map<KProperty1<S, R>, Reducer<*, A>>): Reducer<S, A> =
+    combineReducers(reducers.mapKeys { it.key.name })
