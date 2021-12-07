@@ -1,8 +1,8 @@
-package actions
+package actions.filters
 
 import enums.CompletedStatus
 import redux.RAction
 
-class StatusFilterChanged(val status: String) : RAction {
+class ChangeStatusFilter(private val status: String) : RAction {
     val completedStatus: () -> CompletedStatus = { CompletedStatus.valueOf(status.uppercase()) }
 }

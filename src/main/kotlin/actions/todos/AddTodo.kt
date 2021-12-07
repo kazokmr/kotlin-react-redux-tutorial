@@ -1,4 +1,4 @@
-package actions
+package actions.todos
 
 import entities.Todo
 import redux.RAction
