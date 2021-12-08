@@ -1,3 +1,5 @@
+package components
+
 import react.Props
 import react.dom.div
 import react.dom.h1

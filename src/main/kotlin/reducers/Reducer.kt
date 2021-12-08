@@ -1,7 +1,9 @@
+package reducers
+
 import entities.Todo
 import entities.VisibilityFilter
-import features.filters.filtersReducer
-import features.todos.todosReducer
+import reducers.filters.filtersReducer
+import reducers.todos.todosReducer
 import redux.Reducer
 import redux.combineReducers
 import kotlin.reflect.KProperty1

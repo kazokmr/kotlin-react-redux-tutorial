@@ -1,4 +1,4 @@
-package features.filters
+package reducers.filters
 
 import actions.filters.ChangeColorFilter
 import actions.filters.ChangeStatusFilter

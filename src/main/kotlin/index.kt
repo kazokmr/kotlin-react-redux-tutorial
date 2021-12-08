@@ -1,3 +1,4 @@
+import components.app
 import kotlinext.js.require
 import kotlinx.browser.document
 import react.dom.render

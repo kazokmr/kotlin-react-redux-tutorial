@@ -1,4 +1,4 @@
-package features.todos
+package reducers.todos
 
 import actions.todos.AddTodo
 import actions.todos.ClearCompleted
