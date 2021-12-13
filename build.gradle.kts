@@ -16,6 +16,7 @@ dependencies {
     implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom:6.0.2-pre.274-kotlin-1.6.0")
     implementation("org.jetbrains.kotlin-wrappers:kotlin-redux:4.1.2-pre.274-kotlin-1.6.0")
     implementation("org.jetbrains.kotlin-wrappers:kotlin-styled:5.3.3-pre.274-kotlin-1.6.0")
+    implementation(npm("file-loader", "^6.2.0"))
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.0")
 }
 
