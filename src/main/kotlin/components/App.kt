@@ -27,11 +27,8 @@ val app = fc<Props> {
                     +"Todos"
                 }
                 div(classes = "todoapp") {
-                    // Header
                     header()
-                    // TodoList
                     todoList()
-                    // Footer
                     footer()
                 }
             }
