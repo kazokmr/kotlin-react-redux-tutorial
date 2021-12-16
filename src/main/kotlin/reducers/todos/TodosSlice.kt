@@ -10,22 +10,24 @@ import entities.Todo
 import enums.Color
 import redux.RAction
 
-val initialState = listOf(
+val initialState = arrayOf(
     Todo(0, "Learn React", true),
     Todo(1, "Learn Redux", false, Color.PURPLE),
     Todo(2, "Build something fun!", false, Color.BLUE)
 )
 
-fun todosReducer(state: List<Todo> = initialState, action: RAction): List<Todo> {
+fun todosReducer(state: Array<Todo> = initialState, action: RAction): Array<Todo> {
     return when (action) {
-        is AddTodo -> state.toMutableList().apply {
-            add(Todo(action.id(state), action.text, false))
-        }.toList()
-        is ToggleTodo -> state.map { if (it.id == action.id) it.copy(completed = !it.completed) else it }
-        is SelectColor -> state.map { if (it.id == action.id) it.copy(color = action.getColor()) else it }
-        is DeleteTodo -> state.filter { it.id != action.id }
-        is CompleteAll -> state.map { it.copy(completed = true) }
-        is ClearCompleted -> state.filter { !it.completed }
+        is AddTodo -> state + Todo(action.id(state), action.text, false)
+        is ToggleTodo -> state.map {
+            if (it.id == action.id) it.copy(completed = !it.completed) else it
+        }.toTypedArray()
+        is SelectColor -> state.map {
+            if (it.id == action.id) it.copy(color = action.getColor()) else it
+        }.toTypedArray()
+        is DeleteTodo -> state.filter { it.id != action.id }.toTypedArray()
+        is CompleteAll -> state.map { it.copy(completed = true) }.toTypedArray()
+        is ClearCompleted -> state.filter { !it.completed }.toTypedArray()
         else -> state
     }
 }

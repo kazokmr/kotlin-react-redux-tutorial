@@ -27,7 +27,6 @@ external interface TodoListItemProps : Props {
 }
 
 private val todoListItem = fc<TodoListItemProps> { props ->
-
     li {
         div(classes = "view") {
             div(classes = "segment label") {

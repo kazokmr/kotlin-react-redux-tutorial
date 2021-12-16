@@ -65,7 +65,7 @@ private fun RBuilder.statusFilter(status: CompletedStatus, onChange: (CompletedS
     }
 }
 
-private fun RBuilder.renderedColors(colors: List<Color>, onChange: (Color, String) -> Unit) =
+private fun RBuilder.renderedColors(colors: Array<Color>, onChange: (Color, String) -> Unit) =
     Color.values().forEach {
         label {
             attrs {
@@ -98,7 +98,7 @@ private fun RBuilder.renderedColors(colors: List<Color>, onChange: (Color, Strin
     }
 
 
-private fun RBuilder.colorFilters(colors: List<Color>, onChange: (Color, String) -> Unit) {
+private fun RBuilder.colorFilters(colors: Array<Color>, onChange: (Color, String) -> Unit) {
 
     div(classes = "filters colorFilters") {
         h5 {
@@ -112,7 +112,7 @@ private fun RBuilder.colorFilters(colors: List<Color>, onChange: (Color, String)
 
 private val footer = fc<Props> {
 
-    val colors = emptyList<Color>().toMutableList()
+    val colors = emptyArray<Color>()
     val status = CompletedStatus.ALL
     val todosRemaining = 1
 

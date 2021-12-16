@@ -12,10 +12,8 @@ fun filtersReducer(state: VisibilityFilter = initState, action: RAction): Visibi
     when (action) {
         is ChangeStatusFilter -> state.copy(status = action.completedStatus())
         is ChangeColorFilter -> when (action.changeType) {
-            "added" -> state.let {
-                it.copy(colors = it.colors.toMutableSet().apply { add(action.getColor()) }.apply { toMutableSet() })
-            }
-            "removed" -> state.apply { colors.filter { color -> color != action.getColor() } }
+            "added" -> state.copy(colors = state.colors + action.getColor())
+            "removed" -> state.copy(colors = state.colors.filter { color -> color != action.getColor() }.toTypedArray())
             else -> state
         }
         else -> state

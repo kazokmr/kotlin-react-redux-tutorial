@@ -10,9 +10,27 @@ import kotlin.reflect.KProperty1
 
 // Stateとして管理するオブジェクトをDataクラスで保持する
 data class State(
-    val todos: List<Todo>,
+    val todos: Array<Todo>,
     val visibilityFilter: VisibilityFilter
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class.js != other::class.js) return false
+
+        other as State
+
+        if (!todos.contentEquals(other.todos)) return false
+        if (visibilityFilter != other.visibilityFilter) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = todos.contentHashCode()
+        result = 31 * result + visibilityFilter.hashCode()
+        return result
+    }
+}
 
 // 分割しているReducerをマッピングする
 fun combinedReducers() = combineReducers(

@@ -7,7 +7,7 @@ import react.dom.ul
 import react.fc
 
 private val todoList = fc<Props> {
-    val todos = emptyList<Todo>().toMutableList()
+    val todos = emptyArray<Todo>()
 
     ul(classes = "todo-list") {
         todos.forEach {
