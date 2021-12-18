@@ -1,36 +1,16 @@
-package reducers
-
-import entities.Todo
-import entities.VisibilityFilter
 import reducers.filters.filtersReducer
 import reducers.todos.todosReducer
+import redux.RAction
 import redux.Reducer
 import redux.combineReducers
 import kotlin.reflect.KProperty1
 
-// Stateとして管理するオブジェクトをDataクラスで保持する
-data class State(
-    val todos: Array<Todo>,
-    val visibilityFilter: VisibilityFilter
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || this::class.js != other::class.js) return false
-
-        other as State
-
-        if (!todos.contentEquals(other.todos)) return false
-        if (visibilityFilter != other.visibilityFilter) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = todos.contentHashCode()
-        result = 31 * result + visibilityFilter.hashCode()
-        return result
-    }
-}
+// combinedReducersだとStateの初期状態が認識できなかったため、rootReducer関数でReducer<State, *>を返す
+fun rootReducer(state: State, action: Any) =
+    State(
+        todosReducer(state.todos, action.unsafeCast<RAction>()),
+        filtersReducer(state.visibilityFilter, action.unsafeCast<RAction>())
+    )
 
 // 分割しているReducerをマッピングする
 fun combinedReducers() = combineReducers(

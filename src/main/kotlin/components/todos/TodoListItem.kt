@@ -22,7 +22,7 @@ import react.fc
 external interface TodoListItemProps : Props {
     var todo: Todo
     var onColorChange: (String) -> Unit
-    var onCompletedChange: (Boolean) -> Unit
+    var onCompletedChange: () -> Unit
     var onDelete: () -> Unit
 }
 
@@ -34,10 +34,7 @@ private val todoListItem = fc<TodoListItemProps> { props ->
                     attrs {
                         type = InputType.checkBox
                         checked = props.todo.completed
-                        onChangeFunction = { event ->
-                            val target = event.target as HTMLInputElement
-                            props.onCompletedChange(target.checked)
-                        }
+                        onChangeFunction = { props.onCompletedChange() }
                     }
                 }
                 div(classes = "todo-text") {
@@ -72,7 +69,7 @@ private val todoListItem = fc<TodoListItemProps> { props ->
                 }
                 button(classes = "destroy") {
                     attrs {
-                        onClickFunction = { props.onDelete }
+                        onClickFunction = { props.onDelete() }
                     }
                     timesSolid()
                 }

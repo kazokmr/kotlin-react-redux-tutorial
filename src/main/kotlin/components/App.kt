@@ -2,7 +2,7 @@ package components
 
 import components.footer.footer
 import components.header.header
-import components.todos.todoList
+import container.selectTodos
 import react.Props
 import react.dom.div
 import react.dom.h1
@@ -28,7 +28,7 @@ val app = fc<Props> {
                 }
                 div(classes = "todoapp") {
                     header()
-                    todoList()
+                    selectTodos()
                     footer()
                 }
             }
