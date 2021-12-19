@@ -3,11 +3,12 @@ package components.todos
 import components.modules.timesSolid
 import entities.Todo
 import enums.Color
+import kotlinx.css.color
 import kotlinx.html.InputType
+import kotlinx.html.classes
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
-import kotlinx.html.style
-import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLSelectElement
 import react.Props
 import react.RBuilder
 import react.dom.attrs
@@ -16,8 +17,9 @@ import react.dom.div
 import react.dom.input
 import react.dom.li
 import react.dom.option
-import react.dom.select
 import react.fc
+import styled.css
+import styled.styledSelect
 
 external interface TodoListItemProps : Props {
     var todo: Todo
@@ -42,13 +44,16 @@ private val todoListItem = fc<TodoListItemProps> { props ->
                 }
             }
             div(classes = "segment buttons") {
-                select(classes = "colorPicker") {
+                val todoColor = props.todo.color?.name ?: "".lowercase()
+                styledSelect {
+                    css {
+                        color = kotlinx.css.Color(todoColor)
+                    }
                     attrs {
-                        val color = props.todo.color?.name ?: "".lowercase()
-                        value = color
-                        style = color
+                        classes = setOf("colorPicker")
+                        value = todoColor.replaceFirstChar { it.uppercase() }
                         onChangeFunction = { event ->
-                            val target = event.target as HTMLInputElement
+                            val target = event.target as HTMLSelectElement
                             props.onColorChange(target.value)
                         }
                     }
@@ -57,13 +62,13 @@ private val todoListItem = fc<TodoListItemProps> { props ->
                             value = ""
                         }
                     }
-                    Color.values().map { color ->
+                    Color.values().forEach { color ->
                         option {
                             attrs {
                                 key = color.name
                                 value = color.name
                             }
-                            +color.name.replaceFirstChar { it.uppercase() }
+                            +color.name.lowercase().replaceFirstChar { it.uppercase() }
                         }
                     }
                 }
