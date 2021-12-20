@@ -19,6 +19,7 @@ class TodoListComponent(props: TodoListComponentProps) : RComponent<TodoListComp
         ul(classes = "todo-list") {
             props.todos.forEach {
                 todoListItem {
+                    key = it.id.toString()
                     todo = it
                     onColorChange = { color -> props.selectColor(it.id, color) }
                     onCompletedChange = { props.toggleTodo(it.id) }
