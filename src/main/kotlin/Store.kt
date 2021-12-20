@@ -36,4 +36,4 @@ private val initialStateTodo = arrayOf(
     Todo(2, "Build something fun!", false, Color.BLUE)
 )
 
-val store = createStore<State, RAction, dynamic>(::rootReducer, State(), rEnhancer())
+val store = createStore<State, RAction, dynamic>(::rootReducer, State(todos = initialStateTodo), rEnhancer())

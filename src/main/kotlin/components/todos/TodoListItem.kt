@@ -35,7 +35,7 @@ private val todoListItem = fc<TodoListItemProps> { props ->
                 input(classes = "toggle") {
                     attrs {
                         type = InputType.checkBox
-                        checked = props.todo.completed
+                        defaultChecked = props.todo.completed
                         onChangeFunction = { props.onCompletedChange() }
                     }
                 }
