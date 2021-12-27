@@ -14,7 +14,7 @@ fun kotlinw(target: String): String =
     "org.jetbrains.kotlin-wrappers:kotlin-$target"
 
 // kotlin-wrappers-bom (Kotlin Wrappersの依存関係バージョンの管理をしてくれるBOM)のバージョンを指定する
-val kotlinWrappersVersion = "0.0.1-pre.280-kotlin-1.6.0"
+val kotlinWrappersVersion = "0.0.1-pre.284-kotlin-1.6.10"
 
 dependencies {
     implementation(enforcedPlatform(kotlinw("wrappers-bom:$kotlinWrappersVersion")))
@@ -24,7 +24,10 @@ dependencies {
     implementation(kotlinw("react-router-dom"))
     implementation(kotlinw("redux"))
     implementation(kotlinw("styled"))
+    implementation(kotlinw("mui"))
     implementation(npm("file-loader", "^6.2.0"))
+    implementation(npm("@emotion/react", "^11.7.1"))
+    implementation(npm("@emotion/styled", "^11.6.0"))
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.0")
 }
 
@@ -36,6 +39,5 @@ kotlin {
             }
         }
         binaries.executable()
-        useCommonJs()
     }
 }
