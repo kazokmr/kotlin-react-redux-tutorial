@@ -1,7 +1,7 @@
 package components
 
 import components.footer.footer
-import components.header.header
+import container.header
 import container.selectTodos
 import react.Props
 import react.dom.div
