@@ -14,7 +14,7 @@ fun kotlinw(target: String): String =
     "org.jetbrains.kotlin-wrappers:kotlin-$target"
 
 // kotlin-wrappers-bom (Kotlin Wrappersの依存関係バージョンの管理をしてくれるBOM)のバージョンを指定する
-val kotlinWrappersVersion = "0.0.1-pre.287-kotlin-1.6.10"
+val kotlinWrappersVersion = "0.0.1-pre.290-kotlin-1.6.10"
 
 dependencies {
     implementation(enforcedPlatform(kotlinw("wrappers-bom:$kotlinWrappersVersion")))
