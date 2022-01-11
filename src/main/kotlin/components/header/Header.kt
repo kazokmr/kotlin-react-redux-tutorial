@@ -8,10 +8,10 @@ import react.RBuilder
 import react.RComponent
 import react.State
 import react.dom.attrs
-import react.dom.defaultValue
 import react.dom.events.KeyboardEvent
 import react.dom.header
 import react.dom.input
+import react.setState
 
 external interface HeaderProps : Props {
     var addTodo: (String) -> Unit
@@ -33,10 +33,10 @@ class Header(props: HeaderProps) : RComponent<HeaderProps, HeaderState>(props) {
             input(classes = "new-todo") {
                 attrs {
                     placeholder = "What needs to be done?"
-                    defaultValue = state.text
+                    value = state.text
                     onChangeFunction = { event ->
                         val target = event.target as HTMLInputElement
-                        state.text = target.value
+                        setState { text = target.value }
                     }
                     onKeyDownFunction = { event ->
                         val target = event.target as HTMLInputElement
@@ -44,7 +44,7 @@ class Header(props: HeaderProps) : RComponent<HeaderProps, HeaderState>(props) {
                         val keyEvent = event as KeyboardEvent<*>
                         if (keyEvent.key == "Enter" && trimmedText.isNotEmpty()) {
                             props.addTodo(trimmedText)
-                            state.text = ""
+                            setState { text = "" }
                         }
                     }
                 }
