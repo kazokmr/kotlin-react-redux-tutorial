@@ -1,6 +1,5 @@
 import entities.Todo
 import entities.VisibilityFilter
-import enums.Color
 import enums.CompletedStatus
 import redux.RAction
 import redux.createStore
@@ -30,10 +29,4 @@ data class State(
     }
 }
 
-private val initialStateTodo = arrayOf(
-    Todo(0, "Learn React", true),
-    Todo(1, "Learn Redux", false, Color.PURPLE),
-    Todo(2, "Build something fun!", false, Color.BLUE)
-)
-
-val store = createStore<State, RAction, dynamic>(::rootReducer, State(todos = initialStateTodo), rEnhancer())
+val store = createStore<State, RAction, dynamic>(::rootReducer, State(), rEnhancer())

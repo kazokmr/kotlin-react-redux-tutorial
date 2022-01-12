@@ -4,7 +4,6 @@ import components.modules.timesSolid
 import entities.Todo
 import enums.Color
 import kotlinx.css.color
-import kotlinx.html.InputType
 import kotlinx.html.classes
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
@@ -14,7 +13,8 @@ import react.RBuilder
 import react.dom.attrs
 import react.dom.button
 import react.dom.div
-import react.dom.input
+import react.dom.html.InputType
+import react.dom.html.ReactHTML
 import react.dom.li
 import react.dom.option
 import react.fc
@@ -31,15 +31,17 @@ external interface TodoListItemProps : Props {
 private val todoListItem = fc<TodoListItemProps> { props ->
     li {
         div(classes = "view") {
-            div(classes = "segment label") {
-                input(classes = "toggle") {
-                    attrs {
-                        type = InputType.checkBox
-                        defaultChecked = props.todo.completed
-                        onChangeFunction = { props.onCompletedChange() }
-                    }
+            // Checkboxのcheckedがuncontrollableと認識されてしまうので、この部分だけReactHTMLでdomを構築する
+            ReactHTML.div {
+                attrs.className = "segment label"
+                ReactHTML.input {
+                    attrs.className = "toggle"
+                    attrs.type = InputType.checkbox
+                    attrs.checked = props.todo.completed
+                    attrs.onChange = { props.onCompletedChange() }
                 }
-                div(classes = "todo-text") {
+                ReactHTML.div {
+                    attrs.className = "todo-text"
                     +props.todo.text
                 }
             }
