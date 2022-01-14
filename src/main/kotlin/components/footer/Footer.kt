@@ -110,7 +110,8 @@ private fun RBuilder.colorFilters(colors: Array<Color>, onChange: (Color, String
     }
 }
 
-private val footer = fc<Props> {
+
+val footer = fc<Props> {
 
     val colors = emptyArray<Color>()
     val status = CompletedStatus.ALL
@@ -141,5 +142,3 @@ private val footer = fc<Props> {
         colorFilters(colors, onColorChange)
     }
 }
-
-fun RBuilder.footer() = child(footer)

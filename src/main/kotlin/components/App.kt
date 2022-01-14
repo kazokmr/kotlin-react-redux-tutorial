@@ -1,19 +1,20 @@
 package components
 
 import components.footer.footer
-import container.header
 import container.selectTodos
+import container.todoAdded
+import react.FC
 import react.Props
-import react.dom.div
-import react.dom.h1
-import react.dom.h2
-import react.dom.main
-import react.dom.nav
-import react.dom.section
-import react.fc
+import react.dom.html.ReactHTML
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.h1
+import react.dom.html.ReactHTML.main
+import react.dom.html.ReactHTML.nav
+import react.dom.html.ReactHTML.section
 
-val app = fc<Props> {
-    div(classes = "App") {
+val app = FC<Props> {
+    div {
+        className = "App"
         nav {
             section {
                 h1 {
@@ -22,12 +23,14 @@ val app = fc<Props> {
             }
         }
         main {
-            section(classes = "medium-container") {
-                h2 {
+            section {
+                className = "medium-container"
+                ReactHTML.h2 {
                     +"Todos"
                 }
-                div(classes = "todoapp") {
-                    header()
+                div {
+                    className = "todoapp"
+                    todoAdded()
                     selectTodos()
                     footer()
                 }

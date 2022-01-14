@@ -1,52 +1,29 @@
 package components.header
 
-import kotlinx.html.js.onChangeFunction
-import kotlinx.html.js.onKeyDownFunction
-import org.w3c.dom.HTMLInputElement
+import react.FC
 import react.Props
-import react.RBuilder
-import react.RComponent
-import react.State
-import react.dom.attrs
-import react.dom.events.KeyboardEvent
-import react.dom.header
-import react.dom.input
-import react.setState
+import react.dom.html.ReactHTML.header
+import react.dom.html.ReactHTML.input
+import react.useState
 
 external interface HeaderProps : Props {
     var addTodo: (String) -> Unit
 }
 
-external interface HeaderState : State {
-    var text: String
-}
+val header = FC<HeaderProps> { props ->
+    var text by useState("")
 
-@JsExport
-class Header(props: HeaderProps) : RComponent<HeaderProps, HeaderState>(props) {
-
-    override fun HeaderState.init(props: HeaderProps) {
-        text = ""
-    }
-
-    override fun RBuilder.render() {
-        header(classes = "header") {
-            input(classes = "new-todo") {
-                attrs {
-                    placeholder = "What needs to be done?"
-                    value = state.text
-                    onChangeFunction = { event ->
-                        val target = event.target as HTMLInputElement
-                        setState { text = target.value }
-                    }
-                    onKeyDownFunction = { event ->
-                        val target = event.target as HTMLInputElement
-                        val trimmedText = target.value.trim()
-                        val keyEvent = event as KeyboardEvent<*>
-                        if (keyEvent.key == "Enter" && trimmedText.isNotEmpty()) {
-                            props.addTodo(trimmedText)
-                            setState { text = "" }
-                        }
-                    }
+    header {
+        className = "header"
+        input {
+            className = "new-todo"
+            placeholder = "What needs to be done?"
+            value = text
+            onChange = { text = it.target.value }
+            onKeyDown = {
+                if (it.key == "Enter" && text.isNotEmpty()) {
+                    props.addTodo(text)
+                    text = ""
                 }
             }
         }

@@ -4,12 +4,11 @@ import State
 import actions.todos.DeleteTodo
 import actions.todos.SelectColor
 import actions.todos.ToggleTodo
-import components.todos.TodoListComponent
 import components.todos.TodoListComponentProps
+import components.todos.todoList
 import entities.Todo
 import react.ComponentClass
 import react.Props
-import react.RBuilder
 import react.invoke
 import react.redux.rConnect
 import redux.RAction
@@ -26,7 +25,7 @@ private external interface TodoListDispatchProps : Props {
 }
 
 // TodoListComponentでReduxを利用する
-private val selectTodos: ComponentClass<Props> =
+val selectTodos: ComponentClass<Props> =
     rConnect<State, RAction, WrapperAction, Props, TodoListStateProps, TodoListDispatchProps, TodoListComponentProps>(
         // ComponentにセットするデータをStore(Reducer.kt)のstateから読み込む
         { state, _ ->
@@ -39,6 +38,4 @@ private val selectTodos: ComponentClass<Props> =
             deleteTodo = { todoId -> dispatch(DeleteTodo(todoId)) }
         }
         // セットしたデータとActionをComponentPropsに渡してComponentを読みこむ
-    )(TodoListComponent::class.js.unsafeCast<ComponentClass<TodoListComponentProps>>())
-
-fun RBuilder.selectTodos() = child(selectTodos)
+    )(todoList.unsafeCast<ComponentClass<TodoListComponentProps>>())
