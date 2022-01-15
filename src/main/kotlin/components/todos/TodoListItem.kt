@@ -1,5 +1,9 @@
 package components.todos
 
+import State
+import actions.todos.DeleteTodo
+import actions.todos.SelectColor
+import actions.todos.ToggleTodo
 import components.modules.timesSolid
 import csstype.Color
 import entities.Todo
@@ -14,15 +18,20 @@ import react.dom.html.ReactHTML.li
 import react.dom.html.ReactHTML.option
 import react.dom.html.ReactHTML.select
 import react.key
+import react.redux.useDispatch
+import react.redux.useSelector
+import redux.RAction
+import redux.WrapperAction
 
 external interface TodoListItemProps : Props {
-    var todo: Todo
-    var onColorChange: (String) -> Unit
-    var onCompletedChange: () -> Unit
-    var onDelete: () -> Unit
+    var todoId: Int
 }
 
 val todoListItem = FC<TodoListItemProps> { props ->
+
+    val todo = useSelector<State, Todo> { state -> state.todos.first { it.id == props.todoId } }
+    val dispatch = useDispatch<RAction, WrapperAction>()
+
     li {
         div {
             className = "view"
@@ -31,24 +40,24 @@ val todoListItem = FC<TodoListItemProps> { props ->
                 input {
                     className = "toggle"
                     type = InputType.checkbox
-                    checked = props.todo.completed
-                    onChange = { props.onCompletedChange() }
+                    checked = todo.completed
+                    onChange = { dispatch(ToggleTodo(todo.id)) }
                 }
                 div {
                     className = "todo-text"
-                    +props.todo.text
+                    +todo.text
                 }
             }
             div {
                 className = "segment buttons"
                 select {
-                    val todoColor = props.todo.color?.name ?: "".lowercase()
+                    val todoColor = todo.color?.name ?: "".lowercase()
                     className = "colorPicker"
                     style = jso {
                         color = Color(todoColor)
                     }
                     value = todoColor.replaceFirstChar { it.uppercase() }
-                    onChange = { props.onColorChange(it.target.value) }
+                    onChange = { dispatch(SelectColor(todo.id, it.target.value)) }
                     option {
                         key = ""
                         value = ""
@@ -63,7 +72,7 @@ val todoListItem = FC<TodoListItemProps> { props ->
                 }
                 button {
                     className = "destroy"
-                    onClick = { props.onDelete() }
+                    onClick = { dispatch(DeleteTodo(todo.id)) }
                     timesSolid()
                 }
             }

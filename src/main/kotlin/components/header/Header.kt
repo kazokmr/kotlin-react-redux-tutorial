@@ -1,17 +1,18 @@
 package components.header
 
+import actions.todos.AddTodo
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML.header
 import react.dom.html.ReactHTML.input
+import react.redux.useDispatch
 import react.useState
+import redux.RAction
+import redux.WrapperAction
 
-external interface HeaderProps : Props {
-    var addTodo: (String) -> Unit
-}
-
-val header = FC<HeaderProps> { props ->
+val header = FC<Props> {
     var text by useState("")
+    val dispatch = useDispatch<RAction, WrapperAction>()
 
     header {
         className = "header"
@@ -22,7 +23,7 @@ val header = FC<HeaderProps> { props ->
             onChange = { text = it.target.value }
             onKeyDown = {
                 if (it.key == "Enter" && text.isNotEmpty()) {
-                    props.addTodo(text)
+                    dispatch(AddTodo(text))
                     text = ""
                 }
             }

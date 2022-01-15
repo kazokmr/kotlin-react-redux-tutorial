@@ -4,7 +4,6 @@ import State
 import actions.todos.DeleteTodo
 import actions.todos.SelectColor
 import actions.todos.ToggleTodo
-import components.todos.TodoListComponentProps
 import components.todos.todoList
 import entities.Todo
 import react.ComponentClass
@@ -19,6 +18,13 @@ private external interface TodoListStateProps : Props {
 }
 
 private external interface TodoListDispatchProps : Props {
+    var selectColor: (Int, String) -> Unit
+    var toggleTodo: (Int) -> Unit
+    var deleteTodo: (Int) -> Unit
+}
+
+external interface TodoListComponentProps : Props {
+    var todos: Array<Todo>
     var selectColor: (Int, String) -> Unit
     var toggleTodo: (Int) -> Unit
     var deleteTodo: (Int) -> Unit

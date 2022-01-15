@@ -1,8 +1,8 @@
 package components
 
 import components.footer.footer
-import container.selectTodos
-import container.todoAdded
+import components.header.header
+import components.todos.todoList
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML.div
@@ -30,8 +30,8 @@ val app = FC<Props> {
                 }
                 div {
                     className = "todoapp"
-                    todoAdded()
-                    selectTodos()
+                    header()
+                    todoList()
                     footer()
                 }
             }

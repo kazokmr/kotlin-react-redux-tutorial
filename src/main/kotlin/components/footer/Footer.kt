@@ -1,5 +1,11 @@
 package components.footer
 
+import State
+import actions.filters.ChangeColorFilter
+import actions.filters.ChangeStatusFilter
+import actions.todos.ClearCompleted
+import actions.todos.CompleteAll
+import entities.VisibilityFilter
 import enums.Color
 import enums.CompletedStatus
 import kotlinext.js.jso
@@ -17,6 +23,10 @@ import react.dom.html.ReactHTML.span
 import react.dom.html.ReactHTML.strong
 import react.dom.html.ReactHTML.ul
 import react.key
+import react.redux.useDispatch
+import react.redux.useSelector
+import redux.RAction
+import redux.WrapperAction
 
 external interface RemainingTodosProps : Props {
     var count: Int
@@ -117,16 +127,19 @@ private val renderedColors = FC<ColorFiltersProps> { props ->
 
 val footer = FC<Props> {
 
-    val filterColors = emptyArray<Color>()
-    val filterStatus = CompletedStatus.ALL
-    val todosRemaining = 1
+    val dispatch = useDispatch<RAction, WrapperAction>()
+
+    val todosRemaining = useSelector<State, Int> { state -> state.todos.filter { todo -> !todo.completed }.size }
+    val filter = useSelector<State, VisibilityFilter> { state -> state.visibilityFilter }
+    val filterColors = filter.colors
+    val filterStatus = filter.status
 
     val onColorChange: (Color, String) -> Unit = { color, changeType ->
-        console.log("Color change: ${color.name} $changeType")
+        dispatch(ChangeColorFilter(color.name, changeType))
     }
 
-    val onStatusChange: (CompletedStatus) -> Unit = {
-        console.log("Status change: ${it.name}")
+    val onStatusChange: (CompletedStatus) -> Unit = { completedStatus ->
+        dispatch(ChangeStatusFilter(completedStatus.name))
     }
 
     footer {
@@ -138,10 +151,12 @@ val footer = FC<Props> {
             }
             button {
                 className = "button"
+                onClick = { dispatch(CompleteAll()) }
                 +"Mark All Completed"
             }
             button {
                 className = "button"
+                onClick = { dispatch(ClearCompleted()) }
                 +"Clear Completed"
             }
         }

@@ -1,28 +1,22 @@
 package components.todos
 
-import entities.Todo
+import State
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML.ul
 import react.key
+import react.redux.useSelector
 
-external interface TodoListComponentProps : Props {
-    var todos: Array<Todo>
-    var selectColor: (Int, String) -> Unit
-    var toggleTodo: (Int) -> Unit
-    var deleteTodo: (Int) -> Unit
-}
+val todoList = FC<Props> {
 
-val todoList = FC<TodoListComponentProps> { props ->
+    val todoIds = useSelector<State, Array<Int>> { state -> state.todos.map { it.id }.toTypedArray() }
+
     ul {
         className = "todo-list"
-        props.todos.forEach {
+        todoIds.forEach { todoId ->
             todoListItem {
-                key = it.id.toString()
-                todo = it
-                onColorChange = { color -> props.selectColor(it.id, color) }
-                onCompletedChange = { props.toggleTodo(it.id) }
-                onDelete = { props.deleteTodo(it.id) }
+                key = todoId.toString()
+                this.todoId = todoId
             }
         }
     }
