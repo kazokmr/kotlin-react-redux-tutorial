@@ -2,143 +2,159 @@ package components.footer
 
 import enums.Color
 import enums.CompletedStatus
-import kotlinx.css.backgroundColor
-import kotlinx.html.InputType
-import kotlinx.html.classes
-import kotlinx.html.js.onChangeFunction
-import kotlinx.html.js.onClickFunction
+import kotlinext.js.jso
+import react.FC
 import react.Props
-import react.RBuilder
-import react.dom.attrs
-import react.dom.button
-import react.dom.div
-import react.dom.footer
-import react.dom.form
-import react.dom.h5
-import react.dom.input
-import react.dom.label
-import react.dom.li
-import react.dom.strong
-import react.dom.ul
-import react.fc
-import styled.css
-import styled.styledSpan
+import react.dom.html.ReactHTML.button
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.footer
+import react.dom.html.ReactHTML.form
+import react.dom.html.ReactHTML.h5
+import react.dom.html.ReactHTML.input
+import react.dom.html.ReactHTML.label
+import react.dom.html.ReactHTML.li
+import react.dom.html.ReactHTML.span
+import react.dom.html.ReactHTML.strong
+import react.dom.html.ReactHTML.ul
+import react.key
 
-private fun RBuilder.remainingTodos(count: Int) {
-    div(classes = "todo-count") {
+external interface RemainingTodosProps : Props {
+    var count: Int
+}
+
+private val remainingTodos = FC<RemainingTodosProps> { props ->
+    div {
+        className = "todo-count"
         h5 {
             +"Remaining Todos"
         }
         strong {
-            +"$count"
+            +"${props.count}"
         }
-        +" item${if (count > 1) "s" else ""} left"
+        +" item${if (props.count > 1) "s" else ""} left"
     }
 }
 
-private fun RBuilder.renderedFilters(status: CompletedStatus, onChange: (CompletedStatus) -> Unit) =
-    CompletedStatus.values().forEach {
-        li {
-            attrs {
-                key = it.name
-            }
-            button(classes = if (it == status) "selected" else "") {
-                val completedStatus = it
-                attrs {
-                    onClickFunction = { onChange(completedStatus) }
-                }
-                +it.name.lowercase().replaceFirstChar { it.uppercase() }
-            }
-        }
-    }
+external interface StatusFilterProps : Props {
+    var status: CompletedStatus
+    var onChange: (CompletedStatus) -> Unit
+}
 
-
-private fun RBuilder.statusFilter(status: CompletedStatus, onChange: (CompletedStatus) -> Unit) {
-
-    div(classes = "filters statusFilters") {
+private val statusFilter = FC<StatusFilterProps> { props ->
+    div {
+        className = "filters statusFilters"
         h5 {
             +"Filter by Status"
         }
         ul {
-            renderedFilters(status, onChange)
+            renderedFilters {
+                status = props.status
+                onChange = props.onChange
+            }
         }
     }
 }
 
-private fun RBuilder.renderedColors(colors: Array<Color>, onChange: (Color, String) -> Unit) =
-    Color.values().forEach {
-        label {
-            attrs {
-                key = it.name.lowercase()
+private val renderedFilters = FC<StatusFilterProps> { props ->
+    CompletedStatus.values().forEach { completedStatus ->
+        li {
+            key = completedStatus.name
+            button {
+                className = if (completedStatus == props.status) "selected" else ""
+                onClick = { props.onChange(completedStatus) }
+                +completedStatus.name.lowercase().replaceFirstChar { it.uppercase() }
             }
-            input {
-                val color = it
-                attrs {
-                    type = InputType.checkBox
-                    name = it.name.lowercase()
-                    checked = colors.contains(it)
-                    onChangeFunction = {
-                        onChange(
-                            color,
-                            if (checked) "removed" else "added"
-                        )
-                    }
-                }
-            }
-            styledSpan {
-                attrs {
-                    classes = setOf("color-block")
-                }
-                css {
-                    backgroundColor = kotlinx.css.Color(it.name)
-                }
-            }
-            +it.name.lowercase().replaceFirstChar { it.uppercase() }
         }
     }
+}
 
+external interface ColorFiltersProps : Props {
+    var colors: Array<Color>
+    var onChange: (Color, String) -> Unit
+}
 
-private fun RBuilder.colorFilters(colors: Array<Color>, onChange: (Color, String) -> Unit) {
+private val colorFilters = FC<ColorFiltersProps> { props ->
 
-    div(classes = "filters colorFilters") {
+    div {
+        className = "filters colorFilters"
         h5 {
             +"Filter by Color"
         }
-        form(classes = "colorSelection") {
-            renderedColors(colors, onChange)
+        form {
+            className = "colorSelection"
+            renderedColors {
+                colors = props.colors
+                onChange = props.onChange
+            }
         }
     }
 }
 
+private val renderedColors = FC<ColorFiltersProps> { props ->
+    Color.values().forEach { color ->
+        val checkedColor = props.colors.contains(color)
+        label {
+            key = color.name.lowercase()
+            input {
+                type = react.dom.html.InputType.checkbox
+                name = color.name.lowercase()
+                checked = checkedColor
+                onChange = {
+                    val changeType = if (checkedColor) "removed" else "added"
+                    props.onChange(color, changeType)
+                }
+            }
+            span {
+                className = "color-block"
+                style = jso {
+                    backgroundColor = csstype.Color(color.name)
+                }
+            }
+            +color.name.lowercase().replaceFirstChar { it.uppercase() }
+        }
+    }
+}
 
-val footer = fc<Props> {
+val footer = FC<Props> {
 
-    val colors = emptyArray<Color>()
-    val status = CompletedStatus.ALL
+    val filterColors = emptyArray<Color>()
+    val filterStatus = CompletedStatus.ALL
     val todosRemaining = 1
 
-    val onStatusChange: (CompletedStatus) -> Unit = {
-        console.log("Status change: ${it.name}")
-    }
     val onColorChange: (Color, String) -> Unit = { color, changeType ->
         console.log("Color change: ${color.name} $changeType")
     }
 
+    val onStatusChange: (CompletedStatus) -> Unit = {
+        console.log("Status change: ${it.name}")
+    }
 
-    footer(classes = "footer") {
-        div(classes = "actions") {
+    footer {
+        className = "footer"
+        div {
+            className = "actions"
             h5 {
                 +"Actions"
             }
-            button(classes = "button") {
-                +"Mark ALL Completed"
+            button {
+                className = "button"
+                +"Mark All Completed"
             }
-            button(classes = "button") {
+            button {
+                className = "button"
                 +"Clear Completed"
             }
         }
-        remainingTodos(todosRemaining)
-        statusFilter(status, onStatusChange)
-        colorFilters(colors, onColorChange)
+        remainingTodos {
+            count = todosRemaining
+        }
+        statusFilter {
+            status = filterStatus
+            onChange = onStatusChange
+        }
+        colorFilters {
+            colors = filterColors
+            onChange = onColorChange
+        }
     }
 }
